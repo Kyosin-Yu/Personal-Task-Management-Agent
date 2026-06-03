@@ -5,68 +5,29 @@ Code Descriptions:
 - Every change is saved to tasks.json automatically
 """
 
-from task import Task
-from storage import save_tasks, load_tasks
-
-def show_tasks(tasks):
-    if not tasks:
-        print('No tasks found')
-        return
-    for task in tasks:
-        print(task)
+from agent import chat
 
 def main():
-    tasks = load_tasks()
+    print("[__Task Management Agents__]")
+    print("="*30)
+    print("How can I help you today? :")
+    print("  - 'Add a task to study for finals tomorrow'")
+    print("  - 'Show my tasks'")
+    print("  - 'Mark task 1 as done'")
+    print("  - 'What should I focus on today?'")
+    print("=" * 30)
+    print("Type 'quit' to exit\n")
 
     while True:
-        print("\n=== Task Manager ===")
-        print("1. Add Task")
-        print("2. View All Task")
-        print("3. Mark Task as Done")
-        print("4. Delete Task")
-        print("5. Exit")
+        user_input = input("You: ").strip()
 
-        choice = input("\nChoose an option: ")
+        if not user_input:
+            continue
+        if user_input.lower() in ["quit", "exit", "bye"]:
+            print("Agent: Signing Off. Stay Productive! ")
 
-        if choice == '1':
-            title = input("Task Title: ")
-            description = input("Task Description: ")
-            due_date = input("Task Due Date (e.g. 2024-12-31): ")
-            priority = input("Task Priority (low/medium/high): ")
-            task = Task(title, description, due_date, priority)
-            tasks.append(task)
-            save_tasks(tasks)
-            print ("== Task Added ==")
-
-        elif choice == '2':
-            show_tasks(tasks)
-
-        elif choice == '3':
-            show_tasks(tasks)
-            index = int(input("Enter Task number to mark done (1,2,3...): ")) - 1
-            if 0 <= index < len(tasks):
-                tasks[index].mark_done()
-                save_tasks(tasks)
-                print("== Task Marked as DONE ==")
-            else:
-                print("== Invalid Task Number ==")
-
-        elif choice == '4':
-            show_tasks(tasks)
-            index = int(input("Enter Task number to mark done (1,2,3...): ")) - 1
-            if 0 <= index < len(tasks):
-                tasks.pop(index)
-                save_tasks(tasks)
-                print("== Task DELETED ==")
-            else:
-                print("== Invalid Task Number ==")
-
-        elif choice == '5':
-            print("== Program Terminated ==")
-            break
-
-        else:
-            print("== Invalid Choice ==")
+        response = chat(user_input)
+        print(f"\nAgent: {response}\n")
 
 if __name__ == "__main__":
     main()
