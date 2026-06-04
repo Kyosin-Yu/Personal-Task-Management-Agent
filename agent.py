@@ -2,6 +2,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from storage import save_tasks, load_tasks
 from task import Task
+from smartFeatures import get_daily_briefing, get_priority_summary
 import os
 import json
 
@@ -59,6 +60,12 @@ def chat(user_message):
     
     For general conversation respond:
     {{"action": "chat", "message": "your respond here"}}
+    
+    For daily briefing or "what should I focus on" respond:
+    {{"action": "daily_briefing"}}
+    
+    For priority ranking or scoring respond:
+    {{"action": "priority_summary"}}
     
     Always respond with valid JSON only, nothing else
 """
@@ -128,6 +135,12 @@ def handle_action(reply, tasks):
 
         elif action == "chat":
             return data.get("message", "How can I assist you?")
+
+        elif action == "daily_briefing":
+            return get_daily_briefing()
+
+        elif action == "priority_summary":
+            return get_priority_summary()
 
     except json.JSONDecodeError:
         return reply
