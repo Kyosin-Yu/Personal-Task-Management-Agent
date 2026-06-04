@@ -8,6 +8,30 @@ st.set_page_config(
     page_icon = "",
     layout="wide",
 )
+
+st.markdown("""
+<style>
+.main .block-container { padding-bottom: 80px; }
+
+.chat-container {
+height: 65vh;
+overflow-y: auto;
+padding: 1rem;
+border: 1px solid rgba(255,255,255,0.1);
+border-radius: 12px;
+margin-bottom: 10px;
+background: rgba(0,0,0,0.1);
+}
+.stChatInput {
+position: fixed;
+bottom: 1rem;
+width: 48%;
+z-index: 999;
+background: transparent;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.title(" PERSONAL TASK MANAGEMENT AGENT ")
 st.markdown("---")
 
@@ -19,20 +43,20 @@ with col1:
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+    chat_box = st.container(height=500)
 
-    if prompt := st.chat_input("Talk to agenet..."):
+    with chat_box:
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+
+    if prompt := st.chat_input("Talk to agent..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
+        with st.spinner("Thinking..."):
+            response = chat(prompt)
 
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                response = chat(prompt)
-            st.markdown(response)
         st.session_state.messages.append({"role": "assistant", "content": response})
+        st.rerun()
 
 with col2:
     st.subheader(" TASK OVERVIEW ")

@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from storage import save_tasks, load_tasks
 from task import Task
 from smartFeatures import get_daily_briefing, get_priority_summary
+from datetime import datetime
 import os
 import json
 
@@ -26,8 +27,10 @@ def chat(user_message):
     tasks = load_tasks()
     task_list =  "\n".join([f"- [{t.status}] {t.title} (Priority: {t.priority}, Due: {t.due_date})" for t in tasks]) or "No tasks yet"
 
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     system_prompt = f"""
-    You are a helpful personal task management assistant
+    You are a helpful personal task management assistant.
+    The current date and time is: {now} (Malaysia Time, UTC+8)
     
     Current Task:
     {task_list}
@@ -118,10 +121,17 @@ def handle_action(reply, tasks):
 
         elif action == "mark_done":
             index = data.get("index", 0)
+            title_hint = data.get("title", "").lower()
+            if title_hint:
+                for i, t in enumerate(tasks):
+                    if title_hint in t.title.lower():
+                        tasks[i].mark_done()
+                        save_tasks(tasks)
+                        return f"=== Done: {tasks[i].title} ===\n"
             if 0 <= index < len(tasks):
                 task = tasks[index].mark_done()
                 save_tasks(tasks)
-                return f" Marked as done: {task[index].title}"
+                return f"=== Done: {task[index].title} ===\n"
             return "- Task not found -"
 
         elif action == "delete_task":

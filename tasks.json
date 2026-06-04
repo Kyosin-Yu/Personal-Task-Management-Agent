@@ -5,6 +5,14 @@
         "description": "Tech driven events that speak about Linux",
         "due_date": "2026-06-04",
         "priority": "high",
+        "status": "done"
+    },
+    {
+        "id": "20260605020523",
+        "title": "GDG on Campus Sunway University (Malaysia Build with Google AI)",
+        "description": "Learning, Exploration , and meaningful discussions around AI and technology. Beginner-friendly hands on workshop on pratical AI applications development using Google AI Studio",
+        "due_date": "2026-06-12",
+        "priority": "high",
         "status": "pending"
     }
 ]
