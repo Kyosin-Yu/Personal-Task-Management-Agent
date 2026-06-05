@@ -24,7 +24,7 @@ AI-powered personal task management assistant built with Python, featuring Natur
 - task.py - Task data model
 - storage.py - JSON file storage
 - smartFeatures.py - Daily briefing and priority scoring
-- aiHelper.py - AI helper functions
+- aiHelper.py - AI helper function
 
 
 

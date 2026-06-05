@@ -85,13 +85,13 @@ with col2:
     st.markdown("---")
     st.subheader("-- ALL TASK --")
 
-    if not tasks:
-        st.write("[ No Task Yet ]")
+
+    pending_tasks = [t for t in tasks if t.status != "done"]
+    if not pending_tasks:
+        st.write("[ No Pending Task ]")
     else:
-        for task in tasks:
-            if task.status == "done":
-                st.success(f" FINISHED {task.title}")
-            elif task.priority == "high":
+        for task in pending_tasks:
+            if task.priority == "high":
                 st.error(f"HIGH.PRIO [{task.title}] - Due: {task.due_date}")
             elif task.priority == "medium":
                 st.warning(f"MEDIUM.PRIO [{task.title}] - Due: {task.due_date}")

@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from storage import save_tasks, load_tasks
 from task import Task
 from smartFeatures import get_daily_briefing, get_priority_summary
+from calendarHelper import add_calendar_event, delete_calendar_event, get_upcoming_events
 from datetime import datetime
 import os
 import json
@@ -25,7 +26,11 @@ def chat(user_message):
     })
 
     tasks = load_tasks()
-    task_list =  "\n".join([f"- [{t.status}] {t.title} (Priority: {t.priority}, Due: {t.due_date})" for t in tasks]) or "No tasks yet"
+    pending_tasks = [t for t in tasks if t.status != "done"]
+    task_list = "\n".join([
+        f"- [{t.status}] {t.title} (Pending: {t.priority}, Due: {t.due_date})"
+        for t in pending_tasks
+    ]) or "- No Pending Tasks -"
 
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     system_prompt = f"""
@@ -60,6 +65,15 @@ def chat(user_message):
     
     For delete respond:
     {{"action": "delete_task", "index": <number starting from 0>}}
+    
+    For adding to calendar or when adding a task with a due date respond:
+    {{"action": "add_task", "title": "...", "description": "...", "due_date": "...", "priority": "...", "sync_calendar": true}}
+    
+    For adding a task respond:
+    {{"action": "add_task", "title": "...", description": "...", "due_date": "YYYY-MM-DD", "due_time": "HH:MM or null", "priority": "...", "sync_calendar": true}}
+    
+    For checking calendar or upcoming events respond:
+    {{"action": "check_calendar"}}
     
     For general conversation respond:
     {{"action": "chat", "message": "your respond here"}}
@@ -109,14 +123,29 @@ def handle_action(reply, tasks):
             )
             tasks.append(task)
             save_tasks(tasks)
-            return f"=== Task Added: {task.title} ===\n"
+
+            result = f"=== Task Added: {task.title} ===\n"
+
+            if data.get("sync_calendar") and task.due_date:
+                calendar_result = add_calendar_event(
+                    task.title,
+                    task.description,
+                    task.due_date,
+                    data.get("due_time")
+                )
+                result += f"\n{calendar_result}"
+            return result
+
+        elif action == "check_calendar":
+            return get_upcoming_events()
 
         elif action == "list_tasks":
-            if not tasks:
-                return "- No tasks yet -"
-            result = "Your tasks:\n"
-            for i, t in enumerate(tasks):
-                result += f"{i+1}. [{t.status.upper()}] {t.title} (Priority: {t.priority}, Due: {t.due_date})\n"
+            pending  = [t for t in tasks if t.status != "done"]
+            if not pending:
+                return "- No pending task -"
+            result = "Your Pending Task:\n"
+            for i, t in enumerate(pending):
+                result += f"{i+1}. {t.title} (Priority: {t.priority}, Due: {t.due_date})\n)"
                 return result
 
         elif action == "mark_done":

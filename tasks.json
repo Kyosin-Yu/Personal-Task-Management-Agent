@@ -8,11 +8,27 @@
         "status": "done"
     },
     {
-        "id": "20260605020523",
-        "title": "GDG on Campus Sunway University (Malaysia Build with Google AI)",
-        "description": "Learning, Exploration , and meaningful discussions around AI and technology. Beginner-friendly hands on workshop on pratical AI applications development using Google AI Studio",
-        "due_date": "2026-06-12",
-        "priority": "high",
+        "id": "20260605185647",
+        "title": "first Semester 3",
+        "description": "Reminder for first Semester 3",
+        "due_date": "2026-06-15",
+        "priority": "medium",
+        "status": "pending"
+    },
+    {
+        "id": "20260605193311",
+        "title": "Attend Briefing about ImagineHack",
+        "description": "",
+        "due_date": "2026-06-19",
+        "priority": "medium",
+        "status": "pending"
+    },
+    {
+        "id": "20260605211229",
+        "title": "Result Day",
+        "description": "Result Day",
+        "due_date": "2026-06-13",
+        "priority": "medium",
         "status": "pending"
     }
 ]
