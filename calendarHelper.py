@@ -32,8 +32,8 @@ def add_calendar_event(title, description, due_date, due_time=None):
         service = get_calendar_services()
 
         if due_time:
-            start_datetime = f"{due_date}T{due_time}:00"
-            end_datetime = f"{due_date}T{due_time}:00"
+            start_datetime = f"{due_date}T{due_time}:00+08:00"
+            end_datetime = f"{due_date}T{due_time}:00+08:00"
             event = {
                 "summary": title,
                 "description": description,

@@ -70,7 +70,7 @@ def chat(user_message):
     {{"action": "add_task", "title": "...", "description": "...", "due_date": "...", "priority": "...", "sync_calendar": true}}
     
     For adding a task respond:
-    {{"action": "add_task", "title": "...", description": "...", "due_date": "YYYY-MM-DD", "due_time": "HH:MM or null", "priority": "...", "sync_calendar": true}}
+    {{"action": "add_task", "title": "...", description": "...", "due_date": "YYYY-MM-DD", "due_time": "HH:MM in 24-hour format or null", "priority": "...", "sync_calendar": true}}
     
     For checking calendar or upcoming events respond:
     {{"action": "check_calendar"}}
